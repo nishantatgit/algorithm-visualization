@@ -1,3 +1,4 @@
+import { animate } from './utils/animate';
 // import { UI } from './constants';
 
 // import p5 from 'p5';
@@ -79,10 +80,27 @@ function testKonva(){
 
   let canvas = layer.getCanvas();
 
-  canvas.setPixelRatio(1);
+  //canvas.setPixelRatio(1);
   console.log('canvas ', canvas);
 
-  const array = [100, 150, 250, 340, 200, 50, 320, 87, 43, 89, 213, 423, 54, 435, 100, 333, 250];
+  const array = [ 
+                    61,	206,	397,	21,	264,	96,	312,	167,	431,	36,
+                    406,	377,	55,	163,	344,	267,	63,	406, 449,	165,
+                    218,	415,	314,	114,	183,	141,	305,	81,	381,	18,
+                    79,	6,	168,	299,	423,	94,	259,	358,	101,	103,
+                    2,	33,	401,	250,	364,	145,	279,	150,	374,	430,
+                    137,	412,	236,	119,	7,	287,	290,	74,	402,	246,
+                    41,	97,	53,	313,	126,	395,	124,	386,	288,	284,
+                    31,	17,	327,	39,	336,	139,	40,	262,	130,	405,
+                    383,	326,	65,	20,	445,	59,	52,	156,	39,	345,
+                    344,	29,	322,	416,	196,	196,	2,	123,	249,	79,
+                    213,	438,	432,	199,	159,	43,	19,	166,	213,	354,
+                    280,	433,	187,	399,	325,	121,	65,	380,	227,	309,
+                    76,	36,	124,	422,	247,	428,	449,	412,	129,	81,
+                    438,	254,	14,	176,	96,	419,	273,	242,	85,	189,
+                    58,	361,	168,	393,	288,	77,	269,	308,	12,	159,
+                    246,	257,	438,	205,	145	
+                ];
 
   console.log('drawing array');
   drawArray(layer,array);
@@ -109,10 +127,11 @@ function drawArray(layer,array){
   const length = array.length;
 
   console.log('totalAvailableWidth',totalAvailableWidth);
-  const barWidth = (totalAvailableWidth - 100 - length*25) / length;
-
+  const barWidth = (totalAvailableWidth - 100 - length*5) / length;
+  const positionArray = [];
+  const shapeArray = [];
   array.forEach((v,i,a) => {
-    let x = i*barWidth + i*25 + 50
+    let x = i*barWidth + i*5 + 50
     let tmpRect = new Konva.Rect({
       x : x,
       y : totalAvailableHeight,
@@ -123,6 +142,47 @@ function drawArray(layer,array){
       strokeWidth: 1,
     });
     layer.add(tmpRect);
+
+    positionArray[i] = { x: x, y : totalAvailableHeight };
+    shapeArray.push(tmpRect)
   });
+  
+  
+  function animationCallback(arr){ 
+    
+    for(let i = 0; i< arr.length; i++){
+      let {
+        shape,
+        start,
+        end
+      } = arr[i];
+      if(start < end){
+        shape.x(start);
+      }
+    }
+
+    layer.draw();
+
+    for(let i = 0; i< arr.length; i++){
+      let {
+        shape,
+        start,
+        end
+      } = arr[i];
+      if(start < end){
+        shape.draw();
+      }
+    }   
+  }
+
+   animate(animationCallback,[{shape: shapeArray[0], start: 100, end: 1200}]);
+}
+
+
+
+
+
+function rect({x,y,width,height,fill,stroke,strokeWidth}){
+
 }
 
