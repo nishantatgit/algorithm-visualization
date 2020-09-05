@@ -64,6 +64,13 @@ import { animate } from './utils/animate';
 import Konva from 'konva';
 import  { onDOMReady } from './utils/domReady';
 
+const positionArray = [];
+const shapeArray = [];
+  // create layer
+
+const pause = time => new Promise(resolve => setTimeout(resolve, time));
+
+let layer = new Konva.Layer();
 function testKonva(){
 
   const WIDTH = window.innerWidth - 10;
@@ -75,14 +82,14 @@ function testKonva(){
     height: HEIGHT
   });
 
-   // create layer
-  let layer = new Konva.Layer();
+ 
 
   let canvas = layer.getCanvas();
 
   //canvas.setPixelRatio(1);
   console.log('canvas ', canvas);
 
+  
   const array = [ 
                     61,	206,	397,	21,	264,	96,	312,	167,	431,	36,
                     406,	377,	55,	163,	344,	267,	63,	406, 449,	165,
@@ -101,16 +108,100 @@ function testKonva(){
                     58,	361,	168,	393,	288,	77,	269,	308,	12,	159,
                     246,	257,	438,	205,	145	
                 ];
-
-  console.log('drawing array');
+  
   drawArray(layer,array);
-
-  console.log('Konva ',Konva);
   // add layer to stage
   stage.add(layer);
+
+  bubbleSort(array);
+  
 }
 
-console.log('testKonva ',testKonva);
+async function bubbleSort(array, sortFunction){
+  function defaultSortFunction(a,b){
+    return a-b;
+  }
+  
+  if(Object.prototype.toString.call(array) !== "[object Array]"){
+    throw new TypeError(array + ' is of invalid type');
+  }
+
+  var len = array.length;
+
+  if(len === 0 || len === 1) {
+    return array;
+  }
+
+  sortFunction = sortFunction || defaultSortFunction;
+
+  for(var i = len - 1; i > 0; i--){
+    var swapped = false;
+    for(var j = 0; j < i; j++){
+      if(sortFunction(array[j],array[j+1]) > 0){
+        
+        
+        animate(animationCallback,[
+            { shape : shapeArray[j], start: positionArray[j].x, end : positionArray[j+1].x},
+            { shape : shapeArray[j+1], start: positionArray[j+1].x, end : positionArray[j].x, reverse: true}
+        ]);
+
+        await pause(1000);
+
+        var tmp = array[j+1];
+        array[j+1] = array[j]
+        array[j] = tmp;
+
+         tmp = positionArray[j+1];
+         positionArray[j+1] = positionArray[j]
+         positionArray[j] = tmp;
+
+         tmp = positionArray[j].x;
+         positionArray[j].x = positionArray[j+1].x;
+         positionArray[j+1].x = tmp;
+
+         tmp = shapeArray[j+1];
+         shapeArray[j+1] = shapeArray[j]
+         shapeArray[j] = tmp;
+        swapped = true;
+      }
+    }
+
+    if(!swapped){
+      break;
+    }
+  }
+
+  return array;
+}
+
+function animationCallback(arr){ 
+  for(let i = 0; i< arr.length; i++){
+    let {
+      shape,
+      start,
+      end,
+      reverse
+    } = arr[i];
+
+    if((!reverse && start < end) || (reverse && start > end )){
+      shape.x(start);
+    }
+  }
+
+  layer.draw();
+
+  for(let i = 0; i< arr.length; i++){
+    let {
+      shape,
+      start,
+      end,
+      reverse
+    } = arr[i];
+    if((!reverse && start < end) || (reverse && start > end )){
+      shape.x(start);
+    }
+  }   
+}
 
 onDOMReady(testKonva);
 
@@ -128,8 +219,6 @@ function drawArray(layer,array){
 
   console.log('totalAvailableWidth',totalAvailableWidth);
   const barWidth = (totalAvailableWidth - 100 - length*5) / length;
-  const positionArray = [];
-  const shapeArray = [];
   array.forEach((v,i,a) => {
     let x = i*barWidth + i*5 + 50
     let tmpRect = new Konva.Rect({
@@ -144,38 +233,11 @@ function drawArray(layer,array){
     layer.add(tmpRect);
 
     positionArray[i] = { x: x, y : totalAvailableHeight };
-    shapeArray.push(tmpRect)
+    shapeArray[i] = tmpRect;
   });
+
   
-  
-  function animationCallback(arr){ 
-    
-    for(let i = 0; i< arr.length; i++){
-      let {
-        shape,
-        start,
-        end
-      } = arr[i];
-      if(start < end){
-        shape.x(start);
-      }
-    }
-
-    layer.draw();
-
-    for(let i = 0; i< arr.length; i++){
-      let {
-        shape,
-        start,
-        end
-      } = arr[i];
-      if(start < end){
-        shape.draw();
-      }
-    }   
-  }
-
-   animate(animationCallback,[{shape: shapeArray[0], start: 100, end: 1200}]);
+   //animate(animationCallback,[{shape: shapeArray[0], start: 100, end: 1200},{shape: shapeArray[1], start: 700, end: 200, reverse : true}]);
 }
 
 
