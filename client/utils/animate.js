@@ -1,4 +1,4 @@
-function animate(callback,arr){
+function animate(callback,arr,setComplete){
   animate.isAnimating = true;
   let maxDiff = -1;
   let count = 0;
@@ -25,7 +25,12 @@ function animate(callback,arr){
 
     if(count >= maxDiff) {
       animate.isAnimating = false;
-      window.cancelAnimationFrame(animationFrameHandler)
+      window.cancelAnimationFrame(animationFrameHandler);
+
+      if(typeof setComplete === 'function'){
+        setComplete();
+      }
+  
     } else {
       window.requestAnimationFrame(wrappedCallback);
     } 
@@ -33,4 +38,8 @@ function animate(callback,arr){
   const animationFrameHandler = window.requestAnimationFrame(wrappedCallback);
 }
 
-export { animate }
+var animatedPromise = (callback,arr,resolve) => new Promise(function(resolve){
+  animate(callback,arr,resolve);
+});
+
+export { animatedPromise as animate }

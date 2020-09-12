@@ -68,8 +68,6 @@ const positionArray = [];
 const shapeArray = [];
   // create layer
 
-const pause = time => new Promise(resolve => setTimeout(resolve, time));
-
 let layer = new Konva.Layer();
 function testKonva(){
 
@@ -87,15 +85,13 @@ function testKonva(){
   let canvas = layer.getCanvas();
 
   //canvas.setPixelRatio(1);
-  console.log('canvas ', canvas);
-
   
   const array = [ 
                     61,	206,	397,	21,	264,	96,	312,	167,	431,	36,
                     406,	377,	55,	163,	344,	267,	63,	406, 449,	165,
                     218,	415,	314,	114,	183,	141,	305,	81,	381,	18,
                     79,	6,	168,	299,	423,	94,	259,	358,	101,	103,
-                    2,	33,	401,	250,	364,	145,	279,	150,	374,	430,
+                    2,	33,	401,	250,	364,	145,	279,	150,	374,	430 ,
                     137,	412,	236,	119,	7,	287,	290,	74,	402,	246,
                     41,	97,	53,	313,	126,	395,	124,	386,	288,	284,
                     31,	17,	327,	39,	336,	139,	40,	262,	130,	405,
@@ -107,7 +103,7 @@ function testKonva(){
                     438,	254,	14,	176,	96,	419,	273,	242,	85,	189,
                     58,	361,	168,	393,	288,	77,	269,	308,	12,	159,
                     246,	257,	438,	205,	145	
-                ];
+                ]; 
   
   drawArray(layer,array);
   // add layer to stage
@@ -121,6 +117,13 @@ async function bubbleSort(array, sortFunction){
   function defaultSortFunction(a,b){
     return a-b;
   }
+
+  function animationEndCallback(){
+    console.log('aimated call back');
+    animationEnded = true;
+  }
+
+  var animationEnded;
   
   if(Object.prototype.toString.call(array) !== "[object Array]"){
     throw new TypeError(array + ' is of invalid type');
@@ -140,12 +143,10 @@ async function bubbleSort(array, sortFunction){
       if(sortFunction(array[j],array[j+1]) > 0){
         
         
-        animate(animationCallback,[
+        await animate(animationCallback,[
             { shape : shapeArray[j], start: positionArray[j].x, end : positionArray[j+1].x},
             { shape : shapeArray[j+1], start: positionArray[j+1].x, end : positionArray[j].x, reverse: true}
-        ]);
-
-        await pause(1000);
+        ],animationEndCallback);
 
         var tmp = array[j+1];
         array[j+1] = array[j]
