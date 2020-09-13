@@ -119,7 +119,6 @@ async function bubbleSort(array, sortFunction){
   }
 
   function animationEndCallback(){
-    console.log('aimated call back');
     animationEnded = true;
   }
 
@@ -166,6 +165,8 @@ async function bubbleSort(array, sortFunction){
         swapped = true;
       }
     }
+
+    shapeArray[j].fill('#0C63A1');
 
     if(!swapped){
       break;
