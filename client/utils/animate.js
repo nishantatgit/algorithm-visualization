@@ -1,39 +1,35 @@
+import compare from '../utils/compare';
 function animate(callback, arr, setComplete) {
 	animate.isAnimating = true;
-	let maxDiff = -1;
-	let count = 0;
-
-	arr.forEach((value) => {
-		let { start, end } = value;
-		let diff = Math.abs(end - start);
-		if (diff > maxDiff) {
-			maxDiff = diff;
-		}
-	});
+	const step = 2;
 
 	function wrappedCallback() {
 		callback(arr);
-		count += 1;
-		arr.forEach((v, i, a) => {
-			if (a[i].reverse && a[i].start > a[i].end) {
-				a[i].start = a[i].start - 1;
-			} else if (!a[i].reverse && a[i].end > a[i].start) {
-				a[i].start = a[i].start + 1;
-			}
-		});
 
-		if (count >= maxDiff) {
+		if (compare(arr[1].start, arr[1].end)) {
 			animate.isAnimating = false;
 			window.cancelAnimationFrame(animationFrameHandler);
 
 			if (typeof setComplete === 'function') {
 				setComplete();
 			}
-		} else {
-			window.requestAnimationFrame(wrappedCallback);
-		}
-	}
 
+			return;
+		}
+
+		if (arr[0].start + step > arr[0].end) {
+			arr[0].start = arr[0].end;
+		} else {
+			arr[0].start = arr[0].start + step;
+		}
+
+		if (arr[1].start - step < arr[1].end) {
+			arr[1].start = arr[1].end;
+		} else {
+			arr[1].start -= step;
+		}
+		window.requestAnimationFrame(wrappedCallback);
+	}
 	const animationFrameHandler = window.requestAnimationFrame(wrappedCallback);
 }
 
