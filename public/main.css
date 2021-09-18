@@ -35,6 +35,40 @@ body {
 	margin-top: 48px;
 }
 
+.sub-header {
+	text-align: center;
+	margin-top: 56px;
+}
+
 h1 {
 	margin: 16px;
+}
+
+.buttons-container {
+	width: calc(100% - 40px);
+	margin-left: 20px;
+	margin-right: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 48px;
+}
+
+button {
+	min-width: 150px;
+	padding: 10px 15px;
+	cursor: pointer;
+	appearance: none;
+	border: 1px solid #a06000;
+	border-right: none;
+	color: #a06000;
+	background-color: navajowhite;
+}
+
+button.active-sort {
+	background-color: #a06000;
+	color: navajowhite;
+}
+
+.buttons-container button:last-of-type {
+	border-right: 1px solid #a06000;
 }

@@ -9,6 +9,14 @@ function html(content, scriptName) {
     </head>
     <body>
       <h1 class="main-header">Animating algorithms</h1>
+      <div class="buttons-container js-button-container">
+        <button class="js-bubble-sort">Bubble Sort</button>
+        <button class="js-selection-sort">Selection Sort</button>
+        <button class="js-insertion-sort">Insertion Sort</button>
+        <button class="js-heap-sort">Heap Sort</button>
+        <button class="js-quick-sort">Quick Sort</button>
+        <button class="js-merge-sort">Merge Sort</button>
+      </div>
       <div id="main">${content || ''}</div>
       
       <script src=${scriptName}.js></script>

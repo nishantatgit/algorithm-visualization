@@ -1,12 +1,15 @@
 import compare from '../utils/compare';
 function animate(callback, arr, setComplete) {
 	animate.isAnimating = true;
-	const step = 2;
+	const step = 1;
 
 	function wrappedCallback() {
 		callback(arr);
 
-		if (compare(arr[1].start, arr[1].end)) {
+		if (
+			compare(arr[1].start, arr[1].end) &&
+			compare(arr[0].start, arr[0].end)
+		) {
 			animate.isAnimating = false;
 			window.cancelAnimationFrame(animationFrameHandler);
 
