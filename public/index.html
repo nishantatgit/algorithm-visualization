@@ -1,5 +1,4 @@
-function html(content, scriptName) {
-	return `<html dir="ltr" lang="en">
+<html dir="ltr" lang="en">
     <head>
       <meta charset="utf-8">
       <link rel="stylesheet" href="main.css" />
@@ -12,16 +11,13 @@ function html(content, scriptName) {
       <div class="buttons-container js-button-container">
         <button class="js-bubble-sort">Bubble Sort</button>
         <button class="js-selection-sort">Selection Sort</button>
-        <button class="js-insertion-sort">Insertion Sort</button>
+        <!-- <button class="js-insertion-sort">Insertion Sort</button>
         <button class="js-heap-sort">Heap Sort</button>
         <button class="js-quick-sort">Quick Sort</button>
-        <button class="js-merge-sort">Merge Sort</button>
+        <button class="js-merge-sort">Merge Sort</button> -->
       </div>
-      <div id="main">${content || ''}</div>
+      <div id="main"></div>
       
-      <script src=${scriptName}.js></script>
+      <script src="bundle.js"></script>
     </body>
-   </html>`;
-}
-
-module.exports = html;
+</html>
